@@ -1,0 +1,26 @@
+class MySpecialNumberException extends Exception {
+    public MySpecialNumberException(String message) {
+        super(message);
+    }
+}
+public class Main {
+    public static void myfunc(int x) throws MySpecialNumberException {
+        if (x==10 || x==20 || x= 30) {
+            throw new MySpecialNumberException("Special number detected: " + x);
+        }
+    }
+    public static void main(String[] args) {
+        int[] numbersToCheck = {4 10,20,30};
+        for (int number : numbersToCheck) {
+            try {
+                myfunc(number);
+                System.out.println("No exception for input: " + number);
+            } catch (MySpecialNumberException e) {
+                System.err.println("Caught MySpecialNumberException: " + e.getMessage());
+            } finally {
+                System.out.println("Finally block executed.");
+            }
+        }
+    }
+}
+
