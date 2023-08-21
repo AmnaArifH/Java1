@@ -16,7 +16,7 @@ public class Main {
                 myfunc(number);
                 System.out.println("No exception for input: " + number);
             } catch (MySpecialNumberException e) {
-                System.err.println("Caught MySpecialNumberException: " + e.getMessage());
+                System.out.println("Caught MySpecialNumberException: " + e.getMessage());
             } finally {
                 System.out.println("Finally block executed.");
             }
