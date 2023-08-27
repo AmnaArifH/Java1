@@ -48,7 +48,7 @@ public class CustomThreadExample {
             evenThread.join();
             oddThread.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+         System.out.println("Intrupted...") //  e.printStackTrace();
         }
 
         System.out.println("Threads finished.");
