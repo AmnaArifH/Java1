@@ -1,0 +1,57 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Drink Menu</title>
+</head>
+<body>
+    <h1>Drink Menu</h1>
+    <form action="OrderServlet" method="post">
+        <label for="drink">Select a drink:</label>
+        <select name="drink" id="drink">
+            <option value="">Select a drink</option>
+            
+            <%-- Java code to populate the dropdown list dynamically --%>
+            <%@ page import="java.sql.*" %>
+            <%@ page import="javax.naming.*" %>
+            <%@ page import="javax.sql.*" %>
+            
+            <%
+                Connection connection = null;
+                try {
+                    // Obtain a database connection
+                    Context initContext = new InitialContext();
+                    Context envContext = (Context) initContext.lookup("java:/comp/env");
+                    DataSource ds = (DataSource) envContext.lookup("jdbc/Database");
+                    connection = ds.getConnection();
+
+                    // Query the database to retrieve drinks and rates
+                    String query = "SELECT name, rate FROM beverages";
+                    PreparedStatement preparedStatement = connection.prepareStatement(query);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    // Iterate through the result set and populate the dropdown
+                    while (resultSet.next()) {
+                        String name = resultSet.getString("name");
+                        int rate = resultSet.getInt("rate");
+            %>
+                        <option value="<%= name %>"><%= name %> - $<%= rate %></option>
+            <%
+                    }
+                    resultSet.close();
+                    preparedStatement.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (connection != null) {
+                        connection.close();
+                    }
+                }
+            %>
+        </select>
+        <br>
+        <input type="submit" value="Order">
+    </form>
+</body>
+</html>
