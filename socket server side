@@ -1,0 +1,61 @@
+import java.io.*;
+import java.net.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+public class Server {
+    public static void main(String[] args) {
+        try {
+            ServerSocket serverSocket = new ServerSocket(12345);
+            System.out.println("Server is listening...");
+
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Accepted connection from " + clientSocket.getInetAddress().getHostAddress());
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String clientInput = in.readLine();
+
+                if (clientInput != null) {
+                    String result = getMaxCharacterCount(clientInput);
+                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                    out.println(result);
+                }
+
+                clientSocket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String getMaxCharacterCount(String input) {
+        Map<Character, Integer> charCount = new HashMap<>();
+
+        for (char c : input.toCharArray()) {
+            if (Character.isLetter(c)) {
+                charCount.put(c, charCount.getOrDefault(c, 0) + 1);
+            }
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        int maxCount = 0;
+
+        for (Entry<Character, Integer> entry : charCount.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+            }
+        }
+
+        for (Entry<Character, Integer> entry : charCount.entrySet()) {
+            if (entry.getValue() == maxCount) {
+                result.append(entry.getKey()).append(":").append(entry.getValue()).append(" , ");
+            }
+        }
+
+        // Remove the trailing ", " and return the result
+        return result.substring(0, result.length() - 2);
+    }
+}
