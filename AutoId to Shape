@@ -1,1 +1,75 @@
+import java.util.Date;
+
+class Shape {
+    private static int nextAutoID = 1;
+    private int autoID;
+    private Date creationTimestamp;
+
+    public Shape() {
+        this.autoID = nextAutoID++;
+        this.creationTimestamp = new Date();
+    }
+
+    public int getAutoID() {
+        return autoID;
+    }
+
+    public Date getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "Shape ID: " + autoID + ", Created at: " + creationTimestamp;
+    }
+}
+
+class Node {
+    Shape shape;
+    Node next;
+
+    public Node(Shape shape) {
+        this.shape = shape;
+        this.next = null;
+    }
+}
+
+public class ShapeLinkedList {
+    private Node head;
+
+    public void insert(Shape shape) {
+        Node newNode = new Node(shape);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode;
+        }
+    }
+
+    public void display() {
+        Node current = head;
+        while (current != null) {
+            System.out.println(current.shape);
+            current = current.next;
+        }
+    }
+
+    public static void main(String[] args) {
+        ShapeLinkedList shapeList = new ShapeLinkedList();
+
+        Rectangle rect = new Rectangle(4, 5);
+        Square square = new Square(3);
+        Triangle triangle = new Triangle(3, 4, 5);
+
+        shapeList.insert(rect);
+        shapeList.insert(square);
+        shapeList.insert(triangle);
+
+        shapeList.display();
+    }
+}
 
